@@ -1,5 +1,5 @@
 // src/hypergeometric.rs
-
+use crate::utils::write_vec_to_txt;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 
@@ -27,6 +27,11 @@ pub fn hypergeometric_run(N: u64, D: u64, n: u64, trials: usize) {
         sum += count_black as f64;
         sum_sq += (count_black as f64).powi(2);
     }
+    let filename = format!("output/hypergeometric_{}.txt", n);
+    let title = format!(
+        "Гипергеометрическое распределение (N = {}, D = {}, n = {}, попыток: {})", 
+        N, D, n, trials);
+    let _ = write_vec_to_txt(&filename,&title, &successes);
 
     let empirical_mean = sum / trials as f64;
     let empirical_var = (sum_sq / trials as f64) - empirical_mean.powi(2);

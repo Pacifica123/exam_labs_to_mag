@@ -3,6 +3,7 @@
 
 use rand::Rng;
 use std::f64;
+use crate::utils::write_vec_to_txt;
 
 pub fn geometric_run(p: f64, n: usize) {
     let mut results = Vec::with_capacity(n);
@@ -16,6 +17,9 @@ pub fn geometric_run(p: f64, n: usize) {
         sum += y as f64;
         sum_sq += (y as f64).powi(2);
     }
+    let filename = format!("output/geometric_{}.txt", p);
+    let title = format!("Геометрическое распределение (p = {}, n = {})", p, n);
+    let _ = write_vec_to_txt(&filename, &title, &results);
 
     let empirical_mean = sum / n as f64;
     let empirical_var = (sum_sq / n as f64) - empirical_mean.powi(2);
