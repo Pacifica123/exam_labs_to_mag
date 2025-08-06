@@ -3,10 +3,12 @@ import matplotlib.ticker as ticker
 from matplotlib.widgets import Slider
 import glob
 import os
+import numpy as np
 
 folder_path = "output"
 file_list = glob.glob(os.path.join(folder_path, "*.txt"))
-
+all_data = []
+titles = []
 plots_widgets = []
 
 for file_path in file_list:
@@ -14,12 +16,14 @@ for file_path in file_list:
         lines = f.readlines()
 
     title = lines[0].strip("#").strip()
-    data = list(map(int, lines[1:]))
+    data = list(map(float, lines[1:]))
+    all_data.append(data)
+    titles.append(title)
 
     fig, ax = plt.subplots()
     plt.subplots_adjust(bottom=0.25)
 
-    bins = range(min(data), max(data) + 2)
+    bins = np.linspace(min(data), max(data), num=50)
     ax.hist(data, bins=bins, align='left', rwidth=0.8)
     ax.set_title(title)
     ax.set_xlabel("Value")
@@ -59,5 +63,25 @@ for file_path in file_list:
         'slider_y': slider_stepy,
         'update_func': update_func,
     })
+
+
+
+fig, ax = plt.subplots()
+plt.subplots_adjust(bottom=0.25)
+
+# Определить общие границы для bin-ов
+min_val = min(min(data) for data in all_data)
+max_val = max(max(data) for data in all_data)
+bins = np.linspace(min_val, max_val, 50)  # можно изменить число интервалов под ваш формат данных
+
+# Нарисовать все гистограммы с прозрачностью, чтобы видеть пересечения
+for data, title in zip(all_data, titles):
+    ax.hist(data, bins=bins, alpha=0.5, label=title)
+
+ax.set_title("Сравнительная гистограмма всех файлов")
+ax.set_xlabel("Value")
+ax.set_ylabel("Frequency")
+ax.legend()
+ax.grid(True)
 
 plt.show()
