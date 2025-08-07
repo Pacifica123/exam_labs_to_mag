@@ -5,6 +5,9 @@ use crate::negative_binomial::negative_binomial_run;
 use crate::paskal::paskal_run;
 use crate::polynomial::polynomial_run;
 use crate::normal::normal_run;
+use crate::boltzmann::boltzmann_run;
+use crate::pareto::pareto_run;
+use crate::exponential::exponential_run;
 use crate::utils::{generate_probabilities, remove_dir_contents};
 use std::process::Command;
 
@@ -16,6 +19,9 @@ mod negative_binomial;
 mod paskal;
 mod polynomial;
 mod normal;
+mod boltzmann;
+mod pareto;
+mod exponential;
 
 fn main() {
     let clear_output = true; // Флаг рычаг
@@ -37,8 +43,16 @@ fn main() {
     // paskal_run(1, 0.5, trials);
     // paskal_run(n, 0.5, trials);
     // polynomial_run(n, &probabilities, trials);
-    normal_run(0.0, 1.0, 100000);
-    normal_run(3.5, -2.0, 100000);
+    // normal_run(0.0, 1.0, 100000);
+    // normal_run(3.5, -2.0, 100000);
+    // boltzmann_run(10.0, trials);
+    // boltzmann_run(100.0, trials);
+    // pareto_run(2.0, 1.0, trials);
+    // pareto_run(3.0, 1.0, trials);
+    // pareto_run(3.0, 2.0, trials);
+    exponential_run(0.5, trials);
+    exponential_run(1.0, trials);
+    exponential_run(2.0, trials);
 
     Command::new("scripts/lvenv/bin/python3")
         .arg("scripts/plot_from_txt.py")
